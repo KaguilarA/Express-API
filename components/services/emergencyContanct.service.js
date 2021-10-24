@@ -4,6 +4,11 @@
  */
 
 /**
+ * @file ./../../shared/const.manager
+ */
+const { actions } = require('./../../shared/const.shares');
+
+/**
  * @file ./../models/ailment.models
  */
 const { model, modelData } = require('./../models/emergencyContact.model');
@@ -21,16 +26,19 @@ class EmergencyContactService {
     return new Promise((resolve, reject) => {
       model.find({}, modelData)
         .exec((err, foundData) => {
-        if (err) {
-          reject(err);
-        }
-        model.countDocuments({}).exec((err, count) => {
           if (err) {
             reject(err);
           }
-          resolve({ count, addresses: foundData });
+          if (!foundData) {
+            reject(actions.notFound);
+          }
+          model.countDocuments({}).exec((err, count) => {
+            if (err) {
+              reject(err);
+            }
+            resolve({ count, addresses: foundData });
+          });
         });
-      });
     });
   }
 
@@ -45,6 +53,9 @@ class EmergencyContactService {
         .exec((err, foundData) => {
           if (err) {
             reject(err);
+          }
+          if (!foundData) {
+            reject(actions.notFound);
           }
           resolve(foundData);
         });
@@ -81,6 +92,9 @@ class EmergencyContactService {
           if (err) {
             reject(err);
           }
+          if (!foundData) {
+            reject(actions.notFound);
+          }
           foundData.updateData(newData);
           foundData.save((err, updated) => {
             if (err) {
@@ -103,6 +117,9 @@ class EmergencyContactService {
         .exec((err, removed) => {
           if (err) {
             reject(err);
+          }
+          if (!foundData) {
+            reject(actions.notFound);
           }
           resolve(removed);
         });

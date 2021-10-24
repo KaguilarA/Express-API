@@ -4,6 +4,11 @@
  */
 
 /**
+ * @file ./../../shared/const.manager
+ */
+const { actions } = require('./../../shared/const.shares');
+
+/**
  * User Model Instance && User Model filtered data schema.
  * @file ./../models/user.models
  */
@@ -37,6 +42,9 @@ class UserService {
           if (err) {
             reject(err);
           }
+          if (!foundData) {
+            reject(actions.notFound);
+          }
           model.countDocuments({state: true}).exec((err, count) => {
             if (err) {
               reject(err);
@@ -61,6 +69,9 @@ class UserService {
           if (err) {
             reject(err);
           }
+          if (!foundData) {
+            reject(actions.notFound);
+          }
           resolve(foundData);
         });
     });
@@ -73,12 +84,13 @@ class UserService {
    */
   getByEmail(email) {
     return new Promise((resolve, reject) => {
-      model.findOne({ email }, modelData)
-        .populate(`role`, roleData)
-        .populate(`address`, addressData)
+      model.findOne({ email })
         .exec((err, foundData) => {
           if (err) {
             reject(err);
+          }
+          if (!foundData) {
+            reject(actions.notFound);
           }
           resolve(foundData);
         });
@@ -119,6 +131,9 @@ class UserService {
           if (err) {
             reject(err);
           }
+          if (!foundData) {
+            reject(actions.notFound);
+          }
           foundData.updateData(newData);
           foundData.save((err, updated) => {
             if (err) {
@@ -144,6 +159,9 @@ class UserService {
         .exec((err, foundData) => {
           if (err) {
             reject(err);
+          }
+          if (!foundData) {
+            reject(actions.notFound);
           }
           foundData.setState(true);
           foundData.save((err, updated) => {
@@ -172,6 +190,9 @@ class UserService {
         .exec((err, foundData) => {
           if (err) {
             reject(err);
+          }
+          if (!foundData) {
+            reject(actions.notFound);
           }
           foundData.setState(false);
           foundData.save((err, updated) => {

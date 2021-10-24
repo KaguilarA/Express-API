@@ -6,6 +6,10 @@ module.exports = {
     update: 'update',
     delete: 'delete',
     getAll: 'return all',
-    getById: 'return by id'
+    getById: 'return by id',
+    foundBy: 'found By',
+    notFound: 'Not found data',
+    tokenOut: 'Invalid token',
+    tokenBack: 'Invalid role'
   }
 }

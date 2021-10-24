@@ -4,6 +4,11 @@
  */
 
 /**
+ * @file ./../../shared/const.manager
+ */
+const { actions } = require('./../../shared/const.shares');
+
+/**
  * Role Model Instance && Role Model filtered data schema.
  * @file ./../models/role.models
  */
@@ -22,16 +27,19 @@ class RoleService {
     return new Promise((resolve, reject) => {
       model.find({}, modelData)
         .exec((err, foundData) => {
-        if (err) {
-          reject(err);
-        }
-        model.countDocuments({}).exec((err, count) => {
           if (err) {
             reject(err);
           }
-          resolve({ count, roles: foundData });
+          if (!foundData) {
+            reject(actions.notFound);
+          }
+          model.countDocuments({}).exec((err, count) => {
+            if (err) {
+              reject(err);
+            }
+            resolve({ count, roles: foundData });
+          });
         });
-      });
     });
   }
 
@@ -46,6 +54,9 @@ class RoleService {
         .exec((err, foundData) => {
           if (err) {
             reject(err);
+          }
+          if (!foundData) {
+            reject(actions.notFound);
           }
           resolve(foundData);
         });
@@ -64,6 +75,9 @@ class RoleService {
         if (err) {
           reject(err);
         }
+        if (!foundData) {
+            reject(actions.notFound);
+          }
         resolve(address);
       });
     });
@@ -81,6 +95,9 @@ class RoleService {
         .exec((err, foundData) => {
           if (err) {
             reject(err);
+          }
+          if (!foundData) {
+            reject(actions.notFound);
           }
           foundData.updateData(newData);
           foundData.save((err, updated) => {
@@ -105,6 +122,9 @@ class RoleService {
           if (err) {
             reject(err);
           }
+          if (!foundData) {
+            reject(actions.notFound);
+          }
           foundData.setState(true);
           foundData.save((err, updated) => {
             if (err) {
@@ -127,6 +147,9 @@ class RoleService {
         .exec((err, foundData) => {
           if (err) {
             reject(err);
+          }
+          if (!foundData) {
+            reject(actions.notFound);
           }
           foundData.setState(false);
           foundData.save((err, updated) => {

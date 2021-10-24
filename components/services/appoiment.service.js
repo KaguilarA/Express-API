@@ -4,6 +4,11 @@
  */
 
 /**
+ * @file ./../../shared/const.manager
+ */
+const { actions } = require('./../../shared/const.shares');
+
+/**
  * Appoiment Model Instance && Appoiment Model filtered data schema.
  * @file ./../models/ailment.models
  */
@@ -32,6 +37,9 @@ class AppoimentService {
           if (err) {
             reject(err);
           }
+          if (!foundData) {
+            reject(actions.notFound);
+          }
           model.countDocuments({state: true}).exec((err, count) => {
             if (err) {
               reject(err);
@@ -55,6 +63,9 @@ class AppoimentService {
         .exec((err, foundData) => {
           if (err) {
             reject(err);
+          }
+          if (!foundData) {
+            reject(actions.notFound);
           }
           resolve(foundData);
         });
@@ -94,6 +105,9 @@ class AppoimentService {
         .exec((err, foundData) => {
           if (err) {
             reject(err);
+          }
+          if (!foundData) {
+            reject(actions.notFound);
           }
           foundData.updateData(newData);
           foundData.save((err, updated) => {

@@ -9,6 +9,11 @@
 const { model, modelData } = require('../models/ailment.model');
 
 /**
+ * @file ./../../shared/const.manager
+ */
+const { actions } = require('./../../shared/const.shares');
+
+/**
  * Class definition
  */
 class AilmentSevice {
@@ -23,6 +28,9 @@ class AilmentSevice {
         if (err) {
           reject(err);
         }
+        if (!foundData) {
+            reject(actions.notFound);
+          }
         model.countDocuments({ state: true }).exec((err, count) => {
           if (err) {
             reject(err);
@@ -45,6 +53,9 @@ class AilmentSevice {
           if (err) {
             reject(err);
           }
+          if (!foundData) {
+            reject(actions.notFound);
+          }
           resolve(foundData);
         });
     });
@@ -58,11 +69,11 @@ class AilmentSevice {
   register(newData) {
     return new Promise((resolve, reject) => {
       const newModel = new model(newData);
-      newModel.save((err, address) => {
+      newModel.save((err, registeredData) => {
         if (err) {
           reject(err);
         }
-        resolve(address);
+        resolve(registeredData);
       });
     });
   }
@@ -79,6 +90,9 @@ class AilmentSevice {
         .exec((err, foundData) => {
           if (err) {
             reject(err);
+          }
+          if (!foundData) {
+            reject(actions.notFound);
           }
           foundData.updateData(newData);
           foundData.save((err, updated) => {
@@ -102,6 +116,9 @@ class AilmentSevice {
         .exec((err, removed) => {
           if (err) {
             reject(err);
+          }
+          if (!removed) {
+            reject(actions.notFound);
           }
           resolve(removed);
         });
