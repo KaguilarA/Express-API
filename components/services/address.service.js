@@ -19,6 +19,26 @@ const { actions } = require('./../../shared/const.shares');
 class AddressService {
 
   /**
+   * delete description
+   * @param  {String} id description
+   * @return {Promise} description
+   */
+  delete(id) {
+    return new Promise((resolve, reject) => {
+      model.findOneAndDelete({ id })
+        .exec((err, removed) => {
+          if (err) {
+            reject(err);
+          }
+          if (!removed) {
+            reject(actions.notFound);
+          }
+          resolve(removed);
+        });
+    });
+  }
+
+  /**
    * Returns all Role registered.
    * @return {Promise} description
    */
@@ -102,26 +122,6 @@ class AddressService {
             }
             resolve(updated);
           });
-        });
-    });
-  }
-
-  /**
-   * delete description
-   * @param  {String} id description
-   * @return {Promise} description
-   */
-  delete(id) {
-    return new Promise((resolve, reject) => {
-      model.findOneAndDelete({ id })
-        .exec((err, removed) => {
-          if (err) {
-            reject(err);
-          }
-          if (!removed) {
-            reject(actions.notFound);
-          }
-          resolve(removed);
         });
     });
   }

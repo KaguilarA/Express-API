@@ -20,6 +20,58 @@ const { model, modelData } = require('./../models/role.model');
 class RoleService {
 
   /**
+   * activate description
+   * @param  {String} id description
+   * @return {Promise} description
+   */
+  activate(id) {
+    return new Promise((resolve, reject) => {
+      model.findOne({ id })
+        .exec((err, foundData) => {
+          if (err) {
+            reject(err);
+          }
+          if (!foundData) {
+            reject(actions.notFound);
+          }
+          foundData.setState(true);
+          foundData.save((err, updated) => {
+            if (err) {
+              reject(err);
+            }
+            resolve(updated);
+          });
+        });
+    });
+  }
+
+  /**
+   * delete description
+   * @param  {String} id description
+   * @return {Promise} description
+   */
+  delete(id) {
+    return new Promise((resolve, reject) => {
+      model.findOne({ id })
+        .exec((err, foundData) => {
+          if (err) {
+            reject(err);
+          }
+          if (!foundData) {
+            reject(actions.notFound);
+          }
+          foundData.setState(false);
+          foundData.save((err, updated) => {
+            if (err) {
+              reject(err);
+            }
+            resolve(updated);
+          });
+        });
+    });
+  }
+
+  /**
    * Returns all Role registered.
    * @return {Promise} description
    */
@@ -100,58 +152,6 @@ class RoleService {
             reject(actions.notFound);
           }
           foundData.updateData(newData);
-          foundData.save((err, updated) => {
-            if (err) {
-              reject(err);
-            }
-            resolve(updated);
-          });
-        });
-    });
-  }
-
-  /**
-   * activate description
-   * @param  {String} id description
-   * @return {Promise} description
-   */
-  activate(id) {
-    return new Promise((resolve, reject) => {
-      model.findOne({ id })
-        .exec((err, foundData) => {
-          if (err) {
-            reject(err);
-          }
-          if (!foundData) {
-            reject(actions.notFound);
-          }
-          foundData.setState(true);
-          foundData.save((err, updated) => {
-            if (err) {
-              reject(err);
-            }
-            resolve(updated);
-          });
-        });
-    });
-  }
-
-  /**
-   * delete description
-   * @param  {String} id description
-   * @return {Promise} description
-   */
-  delete(id) {
-    return new Promise((resolve, reject) => {
-      model.findOne({ id })
-        .exec((err, foundData) => {
-          if (err) {
-            reject(err);
-          }
-          if (!foundData) {
-            reject(actions.notFound);
-          }
-          foundData.setState(false);
           foundData.save((err, updated) => {
             if (err) {
               reject(err);

@@ -30,6 +30,68 @@ const { modelData: addressData } = require('./../models/address.model');
 class UserService {
 
   /**
+   * activate description
+   * @param  {String} id description
+   * @return {Promise} description
+   */
+  activate(id) {
+    return new Promise((resolve, reject) => {
+      model.findOne({ id })
+        .exec((err, foundData) => {
+          if (err) {
+            reject(err);
+          }
+          if (!foundData) {
+            reject(actions.notFound);
+          }
+          foundData.setState(true);
+          foundData.save((err, updated) => {
+            if (err) {
+              reject(err);
+            }
+            updated
+              .populate('role', roleData)
+              .populate('address', addressData)
+              .execPopulate().then(data => {
+                resolve(data);
+              });
+          });
+        });
+    });
+  }
+
+  /**
+   * delete description
+   * @param  {String} id description
+   * @return {Promise} description
+   */
+  delete(id) {
+    return new Promise((resolve, reject) => {
+      model.findOne({ id })
+        .exec((err, foundData) => {
+          if (err) {
+            reject(err);
+          }
+          if (!foundData) {
+            reject(actions.notFound);
+          }
+          foundData.setState(false);
+          foundData.save((err, updated) => {
+            if (err) {
+              reject(err);
+            }
+            updated
+              .populate('role', roleData)
+              .populate('address', addressData)
+              .execPopulate().then(data => {
+                resolve(data);
+              });
+          });
+        });
+    });
+  }
+
+  /**
    * Returns all Users registered.
    * @return {Promise} description
    */
@@ -51,6 +113,26 @@ class UserService {
             }
             resolve({ count, users: foundData });
           });
+        });
+    });
+  }
+
+  /**
+   * getById description
+   * @param  {String} email description
+   * @return {Promise} description
+   */
+  getByEmail(email) {
+    return new Promise((resolve, reject) => {
+      model.findOne({ email })
+        .exec((err, foundData) => {
+          if (err) {
+            reject(err);
+          }
+          if (!foundData) {
+            reject(actions.notFound);
+          }
+          resolve(foundData);
         });
     });
   }
@@ -79,12 +161,12 @@ class UserService {
 
   /**
    * getById description
-   * @param  {String} email description
+   * @param  {String} id description
    * @return {Promise} description
    */
-  getByEmail(email) {
+  getByIdUnformatted(id) {
     return new Promise((resolve, reject) => {
-      model.findOne({ email })
+      model.findOne({ id })
         .exec((err, foundData) => {
           if (err) {
             reject(err);
@@ -143,68 +225,6 @@ class UserService {
               .populate('role', roleData)
               .populate('address', addressData)
               .execPopulate().then(data => resolve(data));
-          });
-        });
-    });
-  }
-
-  /**
-   * activate description
-   * @param  {String} id description
-   * @return {Promise} description
-   */
-  activate(id) {
-    return new Promise((resolve, reject) => {
-      model.findOne({ id })
-        .exec((err, foundData) => {
-          if (err) {
-            reject(err);
-          }
-          if (!foundData) {
-            reject(actions.notFound);
-          }
-          foundData.setState(true);
-          foundData.save((err, updated) => {
-            if (err) {
-              reject(err);
-            }
-            updated
-              .populate('role', roleData)
-              .populate('address', addressData)
-              .execPopulate().then(data => {
-                resolve(data);
-              });
-          });
-        });
-    });
-  }
-
-  /**
-   * delete description
-   * @param  {String} id description
-   * @return {Promise} description
-   */
-  delete(id) {
-    return new Promise((resolve, reject) => {
-      model.findOne({ id })
-        .exec((err, foundData) => {
-          if (err) {
-            reject(err);
-          }
-          if (!foundData) {
-            reject(actions.notFound);
-          }
-          foundData.setState(false);
-          foundData.save((err, updated) => {
-            if (err) {
-              reject(err);
-            }
-            updated
-              .populate('role', roleData)
-              .populate('address', addressData)
-              .execPopulate().then(data => {
-                resolve(data);
-              });
           });
         });
     });

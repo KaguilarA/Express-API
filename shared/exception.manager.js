@@ -1,47 +1,41 @@
 class ExceptionManager {
 
   sendData(response, data) {
-    const jsonText = {
+    return response.status(200).json({
       state: true,
       data
-    }
-    return response.status(200).json(jsonText);
+    });
   }
 
   createdData(response, data) {
-    const jsonText = {
+    return response.status(201).json({
       state: true,
       data
-    }
-
-    return response.status(201).json(jsonText);
+    });
   }
 
   acceptedData(response, data) {
-    const jsonText = {
+    return response.status(202).json({
       state: true,
       data
-    };
-    return response.status(202).json(jsonText);
+    });
   }
 
-  noneAuthData(response, data) {
-    const jsonText = {
+  noneAuthData(response, errors) {
+    return response.status(203).json({
       state: false,
-      errors: data
-    };
-    return response.status(203).json(jsonText);
+      errors
+    });
   }
 
   badRequestData(response, msj, err) {
-    const jsonText = {
+    return response.status(400).json({
       state: false,
       errors: {
         msj,
         err
       }
-    };
-    return response.status(400).json(jsonText);
+    });
   }
 
   unauthorizedRequestData(res, msj, err) {
@@ -62,12 +56,11 @@ class ExceptionManager {
   }
 
   notFountData(res, type, id) {
-    const errors = {
-      msj: `${type} ${id} not found`
-    }
     return res.status(404).json({
       state: false,
-      errors
+      errors: {
+        msj: `${type} ${id} not found`
+      }
     });
   }
 

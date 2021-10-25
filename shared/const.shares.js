@@ -10,6 +10,7 @@ module.exports = {
     foundBy: 'found By',
     notFound: 'Not found data',
     tokenOut: 'Invalid token',
-    tokenBack: 'Invalid role'
+    tokenBack: 'Invalid role',
+    renew: 'Update token'
   }
 }

@@ -19,6 +19,26 @@ const { model, modelData } = require('./../models/treatment.model');
 class TreatmentSevice {
 
   /**
+   * delete description
+   * @param  {String} id description
+   * @return {Promise} description
+   */
+  delete(id) {
+    return new Promise((resolve, reject) => {
+      model.findOneAndDelete({ id })
+        .exec((err, removed) => {
+          if (err) {
+            reject(err);
+          }
+          if (!foundData) {
+            reject(actions.notFound);
+          }
+          resolve(removed);
+        });
+    });
+  }
+
+  /**
    * Returns all Role registered.
    * @return {Promise} description
    */
@@ -102,26 +122,6 @@ class TreatmentSevice {
             }
             resolve(updated);
           });
-        });
-    });
-  }
-
-  /**
-   * delete description
-   * @param  {String} id description
-   * @return {Promise} description
-   */
-  delete(id) {
-    return new Promise((resolve, reject) => {
-      model.findOneAndDelete({ id })
-        .exec((err, removed) => {
-          if (err) {
-            reject(err);
-          }
-          if (!foundData) {
-            reject(actions.notFound);
-          }
-          resolve(removed);
         });
     });
   }
